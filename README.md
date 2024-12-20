@@ -80,6 +80,14 @@ Este script inicia el backend y el frontend al mismo tiempo.
    flutter run -d chrome
    ```
 
+### **Variables de Entorno**
+
+Este proyecto utiliza un archivo `.env` para manejar la clave de API de OpenAI de manera segura. Sigue estos pasos para configurarlo:
+
+1. **Crea la carpeta `assets/` en la raíz del proyecto (si no existe).**
+
+   La estructura del proyecto debería verse así:
+
 ## **Estructura del Proyecto**
 
 El proyecto está organizado de la siguiente manera:
@@ -90,6 +98,8 @@ gpt_clone_flutter/
 │   ├── main.dart       # Punto de entrada de la aplicación Flutter
 │   ├── widgets/        # Componentes visuales reutilizables
 │   ├── services/       # Lógica para conectarse con el backend
+├── assets/             # Carpeta para recursos estáticos
+│   ├── .env            # Archivo de configuración para variables de entorno
 ├── server/             # Código del backend en Dart
 │   ├── backend.dart    # Archivo principal del servidor Dart
 ├── pubspec.yaml        # Archivo de configuración de dependencias
@@ -98,6 +108,24 @@ gpt_clone_flutter/
 
 
 ---
+
+2. **Crea el archivo `.env` dentro de la carpeta `assets/`.**
+
+Dentro del archivo `.env`, añade tu clave de API de OpenAI en el siguiente formato:
+```plaintext
+OPENAI_API_KEY=sk-tu-clave-api-aquí
+```
+3. **Declara el archivo `.env` en el archivo `pubspec.yaml`.**
+
+   Abre el archivo `pubspec.yaml` y asegúrate de declarar la carpeta `assets`:
+   ```yaml
+   flutter:
+     assets:
+       - assets/.env
+    ```
+
+
+
 
 ## **Contribuciones**
 
