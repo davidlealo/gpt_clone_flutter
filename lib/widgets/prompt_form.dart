@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../services/api_service.dart';
 import '../providers/form_data_provider.dart';
+import '../services/api_service.dart';
 
 class PromptForm extends StatefulWidget {
   @override
@@ -9,66 +9,60 @@ class PromptForm extends StatefulWidget {
 }
 
 class _PromptFormState extends State<PromptForm> {
-  final _controller = TextEditingController();
-  String _response = '';
+  final TextEditingController _controller = TextEditingController();
+  bool _isLoading = false;
 
   void _sendPrompt() async {
     if (_controller.text.isNotEmpty) {
-      final api = Provider.of<ApiService>(context, listen: false);
+      final prompt = _controller.text;
+      final formData = Provider.of<FormDataProvider>(context, listen: false);
+
+      formData.addToChatHistory("Tú: $prompt");
+
+      setState(() {
+        _isLoading = true;
+      });
+
       try {
-        final data = await api.sendPrompt(_controller.text);
-
-        // Actualiza el estado global con los datos recibidos
-        Provider.of<FormDataProvider>(context, listen: false)
-            .updateFormData(data['formData'] ?? {});
-
-        setState(() {
-          _response = data['response']; // Actualiza la respuesta localmente
-        });
+        final apiService = Provider.of<ApiService>(context, listen: false);
+        final result = await apiService.sendPrompt(prompt);
+        formData.addToChatHistory("GPT: ${result['response']}");
       } catch (e) {
+        formData.addToChatHistory("Error: No se pudo obtener respuesta.");
+      } finally {
         setState(() {
-          _response = 'Error al enviar el prompt: $e';
+          _isLoading = false;
         });
+        _controller.clear();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Formulario de Prompt:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                labelText: 'Escribe tu prompt aquí',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _sendPrompt,
-              child: Text('Enviar'),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Respuesta:',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 5),
-            Text(_response),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Enviar un prompt:',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-      ),
+        SizedBox(height: 10),
+        TextField(
+          controller: _controller,
+          decoration: InputDecoration(
+            hintText: 'Escribe tu prompt aquí...',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: _isLoading ? null : _sendPrompt,
+          child: _isLoading
+              ? CircularProgressIndicator(color: Colors.white)
+              : Text('Enviar'),
+        ),
+      ],
     );
   }
 }
