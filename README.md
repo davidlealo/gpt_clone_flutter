@@ -33,3 +33,112 @@ Clona el repositorio desde GitHub:
 git clone https://github.com/davidlealo/gpt_clone_flutter.git
 cd gpt_clone_flutter
 ```
+## **Instalar Dependencias**
+
+1. **Instalar las dependencias de Flutter:**
+   ```bash
+   flutter pub get
+   ```
+2. **Reparar el caché de dependencias (si es necesario):**
+   ```bash
+   flutter pub cache repair
+   ```
+3. **Verificar dependencias y actualizar:**
+   Si tienes problemas con versiones incompatibles, utiliza:
+   ```bash
+   flutter pub upgrade
+   ```
+
+## **Iniciar el Proyecto**
+
+### **Backend**
+
+El backend utiliza Dart y está configurado en el archivo `server/backend.dart`.
+
+1. **Ejecutar el backend manualmente:**
+   ```bash
+   dart run server/backend.dart
+   ```
+Esto iniciará el servidor en `http://localhost:8080`.
+
+2. **Alternativa: Ejecutar backend y frontend simultáneamente con `start_all.dart`:**
+   ```bash
+   dart run start_all.dart
+   ```
+Este script inicia el backend y el frontend al mismo tiempo.
+
+### **Frontend**
+
+1. **Ejecutar Flutter en Chrome:**
+   ```bash
+   flutter run -d chrome
+   ```
+2. **Solucionar problemas**
+   Si aparece un error relacionado con múltiples dispositivos conectados, asegúrate de que Chrome está configurado como destino predeterminado:
+   ```bash
+   flutter devices
+   flutter run -d chrome
+   ```
+
+## **Estructura del Proyecto**
+
+El proyecto está organizado de la siguiente manera:
+
+
+gpt_clone_flutter/
+├── lib/                # Código principal del frontend en Flutter
+│   ├── main.dart       # Punto de entrada de la aplicación Flutter
+│   ├── widgets/        # Componentes visuales reutilizables
+│   ├── services/       # Lógica para conectarse con el backend
+├── server/             # Código del backend en Dart
+│   ├── backend.dart    # Archivo principal del servidor Dart
+├── pubspec.yaml        # Archivo de configuración de dependencias
+├── start_all.dart      # Script para iniciar backend y frontend simultáneamente
+├── README.md           # Documentación del proyecto
+
+
+---
+
+## **Contribuciones**
+
+Si quieres contribuir a este proyecto, sigue estos pasos:
+
+1. Realiza un fork del repositorio.
+2. Crea una nueva rama para tu funcionalidad:
+   ```bash
+   git checkout -b feature/nueva-funcionalidad
+   ```
+3. Realiza tus cambios y haz un commit:
+   ```bash
+   git commit -m "Descripción de los cambios realizados"
+   ```
+4. Sube los cambios a tu fork:
+   ```bash
+   git push origin feature/nueva-funcionalidad
+   ```
+5. Crea un Pull Request desde tu fork al repositorio principal.
+
+---
+
+## **Licencia**
+
+Este proyecto está bajo la licencia MIT. Puedes consultar el archivo [LICENSE](LICENSE) para obtener más información.
+
+---
+
+## **Contacto**
+
+Si tienes preguntas, sugerencias o algún problema con el proyecto, no dudes en contactarme:
+
+- **Email:** [davidlealo@gmail.com](mailto:davidlealo@gmail.com)
+- **GitHub:** [https://github.com/davidlealo](https://github.com/davidlealo)
+- **LinkedIn:** [https://www.linkedin.com/in/davidlealo/](https://www.linkedin.com/in/davidlealo/)
+
+---
+
+¡Gracias por usar este proyecto! 😊  
+Si encuentras algún problema, abre un issue o envía una Pull Request. ¡Tu ayuda es bienvenida!
+
+
+
+
