@@ -92,7 +92,7 @@ Este proyecto utiliza un archivo `.env` para manejar la clave de API de OpenAI d
 
 El proyecto está organizado de la siguiente manera:
 
-
+```plaintext
 gpt_clone_flutter/
 ├── lib/                # Código principal del frontend en Flutter
 │   ├── main.dart       # Punto de entrada de la aplicación Flutter
@@ -105,7 +105,7 @@ gpt_clone_flutter/
 ├── pubspec.yaml        # Archivo de configuración de dependencias
 ├── start_all.dart      # Script para iniciar backend y frontend simultáneamente
 ├── README.md           # Documentación del proyecto
-
+```
 
 ---
 
@@ -124,6 +124,26 @@ OPENAI_API_KEY=sk-tu-clave-api-aquí
        - assets/.env
     ```
 
+4. **Carga las variables de entorno en `main.dart`.**
+
+   En el archivo `main.dart`, asegúrate de cargar el archivo `.env` con el paquete `flutter_dotenv`:
+   ```dart
+   import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+   Future<void> main() async {
+     await dotenv.load(fileName: "assets/.env");
+     runApp(MyApp());
+   }
+   ```
+5. **Asegúrate de excluir el archivo `.env` del control de versiones.**
+
+   Para evitar exponer tu clave de API, agrega el archivo `.env` a tu archivo `.gitignore`:
+
+```bash
+# Ignorar archivo .env
+assets/.env
+
+```
 
 
 
