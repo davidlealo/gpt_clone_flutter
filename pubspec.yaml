@@ -1,22 +1,23 @@
 name: gpt_clone_flutter
 description: "A new Flutter project for a GPT-like clone."
-publish_to: 'none' # Este proyecto no se publicará en pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.5.4
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   dio: ^5.0.2           # Manejo de solicitudes HTTP al backend
   provider: ^6.0.5      # Gestión de estado
-  flutter_bootstrap: ^1.0.0  # Diseño adaptativo responsivo (opcional)
+  flutter_bootstrap: ^2.0.0  # Diseño adaptativo responsivo (opcional)
   cupertino_icons: ^1.0.8  # Iconos estilo iOS
-  shelf: ^1.5.0        # Framework ligero para servidores HTTP
-  shelf_router: ^1.0.0 # Para definir rutas
-  shelf_static: ^1.0.0 # Para servir archivos estáticos
+  shelf: ^1.4.0         # Framework ligero para servidores HTTP (compatible con SDK 3.5.4)
+  shelf_router: ^1.0.0  # Para definir rutas
+  shelf_static: ^1.0.0  # Para servir archivos estáticos
+  process_run: ^1.2.2+1  # Para ejecutar comandos del sistema
 
 dev_dependencies:
   flutter_test:
@@ -25,4 +26,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
