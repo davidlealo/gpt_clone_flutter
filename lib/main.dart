@@ -42,23 +42,24 @@ class GPTScreen extends StatelessWidget {
         title: Text('Clone GPTs'),
         centerTitle: true,
       ),
-      body: Row(
+      body: Column(
         children: [
-          // Formulario de entrada
+          // Formulario en la parte superior
           Expanded(
-            flex: 1,
+            flex: 3,
             child: Container(
-              color: Colors.white,
               padding: EdgeInsets.all(16.0),
+              color: Colors.white,
               child: PromptForm(), // Widget modular del formulario
             ),
           ),
-          // Pantalla de Chat
+          Divider(height: 1, color: Colors.grey), // Línea divisoria
+          // Chat en la parte inferior
           Expanded(
-            flex: 2,
+            flex: 4,
             child: Container(
-              color: Colors.grey[200],
               padding: EdgeInsets.all(16.0),
+              color: Colors.grey[200],
               child: ChatDisplay(), // Widget modular del chat
             ),
           ),

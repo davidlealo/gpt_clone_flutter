@@ -9,12 +9,14 @@ class PromptForm extends StatefulWidget {
 }
 
 class _PromptFormState extends State<PromptForm> {
-  final TextEditingController _controller = TextEditingController();
+  final _promptController = TextEditingController();
+  final _descriptionController = TextEditingController();
   bool _isLoading = false;
 
   void _sendPrompt() async {
-    if (_controller.text.isNotEmpty) {
-      final prompt = _controller.text;
+    if (_promptController.text.isNotEmpty) {
+      final prompt = _promptController.text;
+      final description = _descriptionController.text;
       final formData = Provider.of<FormDataProvider>(context, listen: false);
 
       formData.addToChatHistory("Tú: $prompt");
@@ -33,7 +35,8 @@ class _PromptFormState extends State<PromptForm> {
         setState(() {
           _isLoading = false;
         });
-        _controller.clear();
+        _promptController.clear();
+        _descriptionController.clear();
       }
     }
   }
@@ -44,14 +47,22 @@ class _PromptFormState extends State<PromptForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Enviar un prompt:',
+          'Formulario:',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 10),
         TextField(
-          controller: _controller,
+          controller: _promptController,
           decoration: InputDecoration(
-            hintText: 'Escribe tu prompt aquí...',
+            labelText: 'Prompt',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        SizedBox(height: 10),
+        TextField(
+          controller: _descriptionController,
+          decoration: InputDecoration(
+            labelText: 'Descripción',
             border: OutlineInputBorder(),
           ),
         ),
