@@ -97,14 +97,20 @@ gpt_clone_flutter/
 ├── lib/                # Código principal del frontend en Flutter
 │   ├── main.dart       # Punto de entrada de la aplicación Flutter
 │   ├── widgets/        # Componentes visuales reutilizables
-│   ├── services/       # Lógica para conectarse con el backend
-├── assets/             # Carpeta para recursos estáticos
-│   ├── .env            # Archivo de configuración para variables de entorno
+│   │   ├── prompt_form.dart  # Widget para el formulario de prompts
+│   │   ├── project_form.dart # Widget para el formulario de proyectos
+│   ├── services/       # Lógica para conectarse con el backend y la API de OpenAI
+│   │   ├── api_service.dart  # Servicio para interactuar con la API
+│   ├── providers/      # Manejo del estado global con Provider
+│   │   ├── form_data_provider.dart  # Proveedor para manejar datos del formulario y chat
+│   ├── assets/         # Carpeta para recursos estáticos
+│   │   ├── .env        # Archivo de configuración para variables de entorno
 ├── server/             # Código del backend en Dart
 │   ├── backend.dart    # Archivo principal del servidor Dart
 ├── pubspec.yaml        # Archivo de configuración de dependencias
 ├── start_all.dart      # Script para iniciar backend y frontend simultáneamente
 ├── README.md           # Documentación del proyecto
+
 ```
 
 ---
