@@ -1,0 +1,25 @@
+name: gpt_clone_flutter
+description: "A new Flutter project for a GPT-like clone."
+publish_to: 'none' # Este proyecto no se publicará en pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.0.2           # Manejo de solicitudes HTTP al backend
+  provider: ^6.0.5      # Gestión de estado
+  flutter_bootstrap: ^1.0.0  # Diseño adaptativo responsivo (opcional)
+  cupertino_icons: ^1.0.8  # Iconos estilo iOS
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0  # Reglas de lint recomendadas para buenas prácticas
+
+flutter:
+  uses-material-design: true
+
