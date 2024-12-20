@@ -33,31 +33,33 @@ class _GPTScreenState extends State<GPTScreen> {
   bool _isLoading = false; // Para mostrar un indicador de carga
 
   void _sendPrompt() async {
-    if (_promptController.text.isNotEmpty) {
-      final prompt = _promptController.text;
-      setState(() {
-        _chatHistory.add("Tú: $prompt");
-        _isLoading = true; // Mostrar el indicador de carga
-      });
+  if (_promptController.text.isNotEmpty) {
+    final prompt = _promptController.text;
+    setState(() {
+      _chatHistory.add("Tú: $prompt");
+      _isLoading = true; // Mostrar indicador de carga
+    });
 
-      try {
-        // Llamada a la API de OpenAI
-        final response = await ApiService().sendPrompt(prompt);
-        setState(() {
-          _chatHistory.add("GPT: $response");
-        });
-      } catch (e) {
-        setState(() {
-          _chatHistory.add("Error: No se pudo obtener respuesta.");
-        });
-      } finally {
-        setState(() {
-          _isLoading = false; // Ocultar el indicador de carga
-        });
-        _promptController.clear();
-      }
+    try {
+      // Llamada a la API de OpenAI
+      final result = await ApiService().sendPrompt(prompt);
+      final responseText = result['response']; // Extrae solo el texto de la respuesta
+      setState(() {
+        _chatHistory.add("GPT: $responseText");
+      });
+    } catch (e) {
+      setState(() {
+        _chatHistory.add("Error: No se pudo obtener respuesta.");
+      });
+    } finally {
+      setState(() {
+        _isLoading = false; // Ocultar indicador de carga
+      });
+      _promptController.clear();
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

@@ -5,8 +5,10 @@ import 'package:http/http.dart' as http;
 class ApiService {
   final String _apiKey = dotenv.env['OPENAI_API_KEY']!;
 
-  Future<String> sendPrompt(String prompt) async {
-    final url = Uri.parse('https://api.openai.com/v1/completions');
+  // Método para enviar prompts a OpenAI
+  Future<Map<String, dynamic>> sendPrompt(String prompt) async {
+    final url = Uri.parse(
+        'https://api.openai.com/v1/chat/completions'); // Cambia el endpoint
 
     try {
       final response = await http.post(
@@ -16,8 +18,10 @@ class ApiService {
           'Authorization': 'Bearer $_apiKey',
         },
         body: jsonEncode({
-          'model': 'text-davinci-003',
-          'prompt': prompt,
+          'model': 'gpt-3.5-turbo', // Cambia el modelo si es necesario
+          'messages': [
+            {'role': 'user', 'content': prompt}, // Formato para mensajes
+          ],
           'max_tokens': 150,
           'temperature': 0.7,
         }),
@@ -25,7 +29,11 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return data['choices'][0]['text'].toString().trim();
+        return {
+          'response':
+              data['choices'][0]['message']['content'].toString().trim(),
+          'status': response.statusCode,
+        };
       } else {
         final errorData = jsonDecode(response.body);
         throw Exception(
@@ -34,6 +42,30 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Error: No se pudo procesar la solicitud. $e');
+    }
+  }
+
+  // Método para guardar datos en el backend
+  Future<void> saveData(Map<String, dynamic> formData) async {
+    final url =
+        Uri.parse('http://localhost:8080/api/save'); // Ajusta según tu backend
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(formData),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Error al guardar datos: ${response.statusCode} - ${response.body}',
+        );
+      }
+    } catch (e) {
+      throw Exception('Error al intentar guardar los datos: $e');
     }
   }
 }
