@@ -10,10 +10,10 @@ void main() async {
   backend.stdout.transform(SystemEncoding().decoder).listen(print);
   backend.stderr.transform(SystemEncoding().decoder).listen(print);
 
-  // Iniciar el frontend
+  // Iniciar el frontend en Chrome
   final frontend = await Process.start(
     'flutter',
-    ['run'],
+    ['run', '-d', 'chrome'], // Cambiar "chrome" para Flutter Web
   );
   print('Frontend iniciado...');
   frontend.stdout.transform(SystemEncoding().decoder).listen(print);
