@@ -6,8 +6,8 @@ import '../providers/form_data_provider.dart';
 class ProjectForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final api = Provider.of<ApiService>(context, listen: false);
-    final formData = Provider.of<FormDataProvider>(context); // Estado global
+    final apiService = Provider.of<ApiService>(context, listen: false);
+    final formData = Provider.of<FormDataProvider>(context);
 
     // Controladores con datos iniciales desde el estado global
     final _controllerName = TextEditingController(text: formData.formData['nombre'] ?? '');
@@ -15,8 +15,8 @@ class ProjectForm extends StatelessWidget {
     final _controllerDescription = TextEditingController(text: formData.formData['description'] ?? '');
     final _controllerEmail = TextEditingController(text: formData.formData['email'] ?? '');
 
-    void _saveData() {
-      // Actualizar estado global
+    void _saveData() async {
+      // Actualizar estado global con datos del formulario
       formData.updateFormData({
         'nombre': _controllerName.text,
         'project': _controllerProject.text,
@@ -24,8 +24,20 @@ class ProjectForm extends StatelessWidget {
         'email': _controllerEmail.text,
       });
 
-      // Guardar datos en el backend
-      api.saveData(formData.formData);
+      try {
+        // Guardar datos en el backend
+        await apiService.saveData(formData.formData);
+
+        // Confirmación al usuario
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Datos guardados exitosamente')),
+        );
+      } catch (e) {
+        // Manejo de errores al guardar datos
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al guardar los datos: $e')),
+        );
+      }
     }
 
     return Card(

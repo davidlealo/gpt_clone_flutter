@@ -11,10 +11,16 @@ class FormDataProvider with ChangeNotifier {
   Map<String, dynamic> get formData => _formData;
   List<String> get chatHistory => _chatHistory;
 
-  // Actualiza los datos del formulario
+  // Actualiza los datos del formulario con nuevos valores
   void updateFormData(Map<String, dynamic> newFormData) {
     _formData = {..._formData, ...newFormData};
     notifyListeners(); // Notifica a los oyentes
+  }
+
+  // Rellenar automáticamente el formulario desde un prompt
+  void fillFormFromPrompt(Map<String, String> extractedData) {
+    _formData = {..._formData, ...extractedData};
+    notifyListeners();
   }
 
   // Agrega un mensaje al historial del chat
