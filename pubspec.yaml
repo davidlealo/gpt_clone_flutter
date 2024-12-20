@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^5.0.2           # Manejo de solicitudes HTTP al backend
-  provider: ^6.0.5      # Gestión de estado
+  provider: ^6.1.2      # Gestión de estado
   flutter_bootstrap: ^2.0.0  # Diseño adaptativo responsivo (opcional)
   cupertino_icons: ^1.0.8  # Iconos estilo iOS
   shelf: ^1.4.0         # Framework ligero para servidores HTTP (compatible con SDK 3.5.4)
