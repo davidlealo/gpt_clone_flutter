@@ -1,30 +1,61 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 import 'package:gpt_clone_flutter/main.dart';
+import 'package:gpt_clone_flutter/services/api_service.dart';
+import 'package:gpt_clone_flutter/widgets/prompt_form.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('PromptForm renders and processes input', (WidgetTester tester) async {
+    // Simular un ApiService para pruebas
+    final mockApiService = MockApiService();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Renderizar la app con Provider
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          Provider<ApiService>.value(value: mockApiService),
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            body: PromptForm(
+              onFormFilled: (formData) {
+                // Este callback puede verificarse si es necesario
+                expect(formData['nombre'], 'Ejemplo');
+              },
+            ),
+          ),
+        ),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Verificar que el widget PromptForm está presente
+    expect(find.byType(TextField), findsOneWidget);
+    expect(find.text('Enviar'), findsOneWidget);
+
+    // Simular entrada de texto
+    await tester.enterText(find.byType(TextField), 'Prueba de prompt');
+    await tester.tap(find.text('Enviar'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verificar que la respuesta del modelo se muestra en la interfaz
+    expect(find.textContaining('Simulación de respuesta'), findsOneWidget);
   });
+}
+
+// Mock del ApiService para evitar llamadas reales a la API
+class MockApiService implements ApiService {
+  @override
+  Future<Map<String, dynamic>> sendPrompt(String prompt) async {
+    return {
+      'response': 'Simulación de respuesta para: $prompt',
+      'formData': {'nombre': 'Ejemplo', 'project': 'Proyecto 1'},
+    };
+  }
+
+  @override
+  Future<void> saveData(Map<String, dynamic> formData) async {
+    // Simular guardado sin errores
+  }
 }

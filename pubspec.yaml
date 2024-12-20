@@ -14,6 +14,9 @@ dependencies:
   provider: ^6.0.5      # Gestión de estado
   flutter_bootstrap: ^1.0.0  # Diseño adaptativo responsivo (opcional)
   cupertino_icons: ^1.0.8  # Iconos estilo iOS
+  shelf: ^1.5.0        # Framework ligero para servidores HTTP
+  shelf_router: ^1.0.0 # Para definir rutas
+  shelf_static: ^1.0.0 # Para servir archivos estáticos
 
 dev_dependencies:
   flutter_test:
