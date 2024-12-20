@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'services/api_service.dart';
+import 'providers/form_data_provider.dart';
 
 Future<void> main() async {
   await dotenv.load(); // Cargar las variables de entorno desde .env
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FormDataProvider()),
+        Provider(create: (_) => ApiService()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -29,37 +39,35 @@ class GPTScreen extends StatefulWidget {
 
 class _GPTScreenState extends State<GPTScreen> {
   final TextEditingController _promptController = TextEditingController();
-  final List<String> _chatHistory = [];
   bool _isLoading = false; // Para mostrar un indicador de carga
 
   void _sendPrompt() async {
-  if (_promptController.text.isNotEmpty) {
-    final prompt = _promptController.text;
-    setState(() {
-      _chatHistory.add("Tú: $prompt");
-      _isLoading = true; // Mostrar indicador de carga
-    });
+    if (_promptController.text.isNotEmpty) {
+      final prompt = _promptController.text;
+      // Actualizar chat en el estado global
+      final formData = Provider.of<FormDataProvider>(context, listen: false);
+      formData.addToChatHistory("Tú: $prompt");
 
-    try {
-      // Llamada a la API de OpenAI
-      final result = await ApiService().sendPrompt(prompt);
-      final responseText = result['response']; // Extrae solo el texto de la respuesta
       setState(() {
-        _chatHistory.add("GPT: $responseText");
+        _isLoading = true; // Mostrar indicador de carga
       });
-    } catch (e) {
-      setState(() {
-        _chatHistory.add("Error: No se pudo obtener respuesta.");
-      });
-    } finally {
-      setState(() {
-        _isLoading = false; // Ocultar indicador de carga
-      });
-      _promptController.clear();
+
+      try {
+        // Llamada a la API de OpenAI
+        final result = await ApiService().sendPrompt(prompt);
+        final responseText = result['response']; // Extrae solo el texto de la respuesta
+
+        formData.addToChatHistory("GPT: $responseText");
+      } catch (e) {
+        formData.addToChatHistory("Error: No se pudo obtener respuesta.");
+      } finally {
+        setState(() {
+          _isLoading = false; // Ocultar indicador de carga
+        });
+        _promptController.clear();
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,33 +115,37 @@ class _GPTScreenState extends State<GPTScreen> {
           // Columna Derecha: Chat
           Expanded(
             flex: 2,
-            child: Container(
-              padding: EdgeInsets.all(16.0),
-              color: Colors.grey[200],
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Chat:',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            child: Consumer<FormDataProvider>(
+              builder: (context, formData, _) {
+                return Container(
+                  padding: EdgeInsets.all(16.0),
+                  color: Colors.grey[200],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Chat:',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: formData.chatHistory.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5.0),
+                              child: Text(
+                                formData.chatHistory[index],
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _chatHistory.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0),
-                          child: Text(
-                            _chatHistory[index],
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ],

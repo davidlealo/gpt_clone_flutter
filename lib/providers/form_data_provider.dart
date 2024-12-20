@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
 
 class FormDataProvider with ChangeNotifier {
-  // Estado compartido
+  // Estado compartido para los datos del formulario
   Map<String, dynamic> _formData = {};
 
-  // Getter para obtener los datos
-  Map<String, dynamic> get formData => _formData;
+  // Estado compartido para el historial del chat
+  final List<String> _chatHistory = [];
 
-  // Método para actualizar los datos
+  // Getters
+  Map<String, dynamic> get formData => _formData;
+  List<String> get chatHistory => _chatHistory;
+
+  // Actualiza los datos del formulario
   void updateFormData(Map<String, dynamic> newFormData) {
-    _formData = {..._formData, ...newFormData}; // Combina el nuevo con el existente
+    _formData = {..._formData, ...newFormData};
     notifyListeners(); // Notifica a los oyentes
   }
 
-  // Método para reiniciar el formulario si es necesario
-  void resetFormData() {
+  // Agrega un mensaje al historial del chat
+  void addToChatHistory(String message) {
+    _chatHistory.add(message);
+    notifyListeners(); // Notifica a los oyentes
+  }
+
+  // Reinicia el historial del chat y los datos del formulario
+  void resetData() {
     _formData = {};
-    notifyListeners();
+    _chatHistory.clear();
+    notifyListeners(); // Notifica a los oyentes
   }
 }
